@@ -14,15 +14,29 @@ class Circle:
     def __init__(self):
         self.radius = 50
         self.center_point = (100, 100)
+        
+    def update_x(self, shift_x):
+        self.center_point = (
+            self.center_point[0] + shift_x,
+            self.center_point[1]
+        )
+        
+    def update_y(self, shift_y):
+        self.center_point = (
+            self.center_point[0],
+            self.center_point[1] + shift_y
+        )
 
 class Character:
 
     key_map = {
-        37: "left",
-        38: "up",
-        39: "right",
-        40: "down"
+        "left": 37,
+        "up": 38,
+        "right": 39,
+        "down": 40
     }
+    
+    move_dist = 10
 
     def __init__(self):
         self.circle_shape = Circle()
@@ -38,10 +52,19 @@ class Character:
         )
         
     def move(self, key):
-        if key in Character.key_map.keys():
-            print Character.key_map[key]
-        
-
+        if key in Character.key_map.values():
+            if key == Character.key_map["right"]:
+                print "move right"
+                self.circle_shape.update_x(Character.move_dist)
+            if key == Character.key_map["left"]:
+                print "move left"
+                self.circle_shape.update_x(-Character.move_dist)
+            if key == Character.key_map["up"]:
+                print "move up"
+                self.circle_shape.update_y(-Character.move_dist)
+            if key == Character.key_map["down"]:
+                print "move down"
+                self.circle_shape.update_y(Character.move_dist)
 cliq = Character()
 
 
