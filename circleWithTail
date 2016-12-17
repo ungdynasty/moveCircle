@@ -1,4 +1,4 @@
-import simplegui
+import simplegui, time
 
 
 # return rectangle coordinate
@@ -11,14 +11,8 @@ def rect_coords (length, height, startpos = (0, 0)) :
         (startpos[0] + length, startpos[1])  
     ]
 
-    for segment in self.body.list_segments():
-        canvas.draw_circle(
-            segment,
-            self.circle_shape.radius /2,
-            self.shape_attributes.line_width,
-            self.shape_attributes.fill_color,
-            self.shape_attributes.fill_color    
-            )
+
+
 
 
 
@@ -40,13 +34,25 @@ class ShapeAttributes:
         # For color: http://www.codeskulptor.org/docs.html#Colors
         
 
-        
 class Circle:
     def __init__ (self):
         self.radius = 50
         self.center_point = (100, 100)
     
-
+    '''
+    def update_x (self, shift_x):
+        self.center_point = (
+            self.center_point[0] + shift_x,
+            self.center_point[1]
+        )
+    
+    def update_y (self, shift_y):
+        self.center_point = (
+            self.center_point[0],
+            self.center_point[1] + shift_y
+        )
+    '''
+    
 class Body:
     
     def __init__(self):
@@ -57,9 +63,6 @@ class Body:
         
     def list_segments(self):
         return list(self.body_segments)
-    
-        
-    
 
 class Character:
     key_map = {
@@ -90,11 +93,12 @@ class Character:
 
     def bumps_into_right_wall(self):
         return self.circle_shape.center_point[0] >= 500-self.circle_shape.radius
-
+    
     def save_me(self):
         segment = self.circle_shape.center_point
         self.body.append(segment)
-    
+        
+        
     #draw a circle on canvas
     #(center_point, radius, line_width, line_color, fill_color = color
     def draw_me (self, canvas):
@@ -178,6 +182,7 @@ cliq = Character()
 
 # draw on canvas
 #===================================================
+ticker = 0
 def draw(canvas):
 
         #canvas.draw_polygon(point_list, 
@@ -187,9 +192,15 @@ def draw(canvas):
     canvas.draw_polygon(box1, 20, "Aqua") #draw rectangle
     #canvas.draw_polygon(box2, 20, "Pink")
 
-        
-    cliq.draw_me(canvas)    #draw circle 
-        
+#    print time.time().
+    global ticker 
+    ticker += 1
+    if ticker == 3:
+        cliq.save_me()    
+        ticker = 0
+    cliq.draw_me(canvas)    #draw circle
+    
+       
     return
  
 
